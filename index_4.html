@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PL-01 · Cập nhật Pháp lý &amp; Tiêu chuẩn Xây dựng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blueprint-bg:#0E2A3F;
+    --blueprint-bg-2:#0B2233;
+    --grid-line:rgba(130,190,215,0.14);
+    --grid-line-strong:rgba(130,190,215,0.28);
+    --paper:#F3EEE0;
+    --paper-dim:#E7E0CC;
+    --ink:#1B2430;
+    --ink-soft:#4A5568;
+    --stamp-red:#B23A2E;
+    --brass:#B8935F;
+    --cyan:#7FC4DC;
+    --ok-green:#4C7A5A;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'IBM Plex Sans',sans-serif;
+    background:
+      repeating-linear-gradient(0deg, var(--grid-line) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(90deg, var(--grid-line) 0 1px, transparent 1px 28px),
+      radial-gradient(ellipse at top left, var(--blueprint-bg) 0%, var(--blueprint-bg-2) 70%);
+    color:var(--paper);
+    min-height:100vh;
+    padding:24px;
+  }
+  .sheet{
+    max-width:1100px;
+    margin:0 auto;
+    border:2px solid var(--cyan);
+    background:rgba(14,42,63,0.35);
+    backdrop-filter:blur(2px);
+  }
+  /* ===== Title block (khung tên bản vẽ) ===== */
+  .titleblock{
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr;
+    border-bottom:2px solid var(--cyan);
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .tb-main{
+    padding:18px 20px;
+    border-right:1px solid var(--grid-line-strong);
+  }
+  .tb-eyebrow{
+    font-size:11px;
+    letter-spacing:2px;
+    color:var(--cyan);
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .tb-title{
+    font-size:22px;
+    font-weight:700;
+    color:var(--paper);
+    line-height:1.3;
+  }
+  .tb-sub{
+    margin-top:6px;
+    font-size:13px;
+    color:#B9D3DE;
+  }
+  .tb-cell{
+    padding:10px 16px;
+    border-right:1px solid var(--grid-line-strong);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .tb-cell:last-child{border-right:none;}
+  .tb-label{font-size:10px;letter-spacing:1.5px;color:var(--cyan);text-transform:uppercase;}
+  .tb-value{font-size:14px;margin-top:3px;color:var(--paper);}
+  .tb-project-input{
+    grid-column:1 / -1;
+    border-top:1px solid var(--grid-line-strong);
+    padding:10px 20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .tb-project-input label{font-size:11px;letter-spacing:1.5px;color:var(--cyan);text-transform:uppercase;white-space:nowrap;}
+  .tb-project-input input{
+    flex:1;
+    background:transparent;
+    border:none;
+    border-bottom:1px dashed var(--grid-line-strong);
+    color:var(--paper);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:14px;
+    padding:4px 2px;
+    outline:none;
+  }
+  .tb-project-input input::placeholder{color:#6F8A9A;}
+
+  /* ===== Controls area ===== */
+  .controls{
+    padding:22px 24px;
+    border-bottom:2px solid var(--cyan);
+  }
+  .controls-row{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    align-items:flex-start;
+  }
+  .field-group{flex:1;min-width:260px;}
+  .field-group h3{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--cyan);
+    margin:0 0 10px 0;
+  }
+  .key-input{
+    width:100%;
+    padding:10px 12px;
+    background:var(--paper);
+    border:1px solid var(--brass);
+    color:var(--ink);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+  }
+  .key-hint{
+    font-size:11.5px;
+    color:#9FBFCC;
+    margin-top:6px;
+    line-height:1.5;
+  }
+  .key-hint a{color:var(--cyan);}
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 14px;
+  }
+  .legend label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    cursor:pointer;
+    color:#DCE8ED;
+  }
+  .legend input{accent-color:var(--stamp-red);}
+  .search-block{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-width:180px;
+  }
+  .stamp-btn{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    border:3px solid var(--stamp-red);
+    background:transparent;
+    color:var(--stamp-red);
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:transform .15s ease, background .15s ease;
+    position:relative;
+  }
+  .stamp-btn::before{
+    content:'';
+    position:absolute;
+    inset:8px;
+    border:1px solid var(--stamp-red);
+    border-radius:50%;
+    opacity:.6;
+  }
+  .stamp-btn:hover{background:rgba(178,58,46,0.12);transform:rotate(-3deg) scale(1.03);}
+  .stamp-btn:disabled{opacity:.5;cursor:wait;transform:none;}
+  .status-line{
+    margin-top:10px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    color:var(--cyan);
+    min-height:16px;
+    text-align:center;
+  }
+
+  /* ===== Revision table (bảng ghi thay đổi) — signature element ===== */
+  .revtable-wrap{padding:22px 24px;border-bottom:2px solid var(--cyan);}
+  .revtable-wrap h2{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:14px;
+    letter-spacing:1.5px;
+    color:var(--paper);
+    text-transform:uppercase;
+    margin:0 0 4px 0;
+  }
+  .revtable-wrap .caption{
+    font-size:12.5px;
+    color:#9FBFCC;
+    margin-bottom:14px;
+  }
+  table.revtable{
+    width:100%;
+    border-collapse:collapse;
+    background:var(--paper);
+    color:var(--ink);
+    font-size:13.5px;
+  }
+  table.revtable th{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:10px 12px;
+    text-align:left;
+  }
+  table.revtable td{
+    padding:12px;
+    border-bottom:1px solid var(--paper-dim);
+    vertical-align:top;
+  }
+  table.revtable tr:last-child td{border-bottom:none;}
+  .delta{
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--stamp-red);
+    font-weight:700;
+  }
+  .doc-name{font-weight:600;}
+  .doc-field{
+    display:inline-block;
+    font-size:10.5px;
+    padding:1px 6px;
+    border:1px solid var(--brass);
+    color:var(--brass);
+    font-family:'IBM Plex Mono',monospace;
+    margin-top:4px;
+    text-transform:uppercase;
+  }
+  .doc-source a{color:var(--ok-green);font-size:12px;word-break:break-all;}
+  .empty-note{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    color:#9FBFCC;
+    padding:18px;
+    text-align:center;
+    border:1px dashed var(--grid-line-strong);
+  }
+  .ai-text{
+    background:var(--paper);
+    color:var(--ink);
+    padding:18px 20px;
+    font-size:14px;
+    line-height:1.65;
+    white-space:pre-wrap;
+  }
+
+  /* ===== Static overview cards ===== */
+  .overview{padding:22px 24px;border-bottom:2px solid var(--cyan);}
+  .overview h2{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:14px;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 4px 0;
+  }
+  .overview .caption{font-size:12.5px;color:#9FBFCC;margin-bottom:16px;}
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+    gap:14px;
+  }
+  .card{
+    background:var(--paper);
+    color:var(--ink);
+    padding:16px;
+    border-left:4px solid var(--brass);
+  }
+  .card h4{margin:0 0 8px 0;font-size:14.5px;}
+  .card p{margin:0;font-size:13px;line-height:1.55;color:var(--ink-soft);}
+  .card .tag{
+    display:inline-block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    letter-spacing:1px;
+    color:var(--stamp-red);
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .disclaimer{
+    margin-top:14px;
+    font-size:12px;
+    color:#F2C9A0;
+    border-left:3px solid var(--brass);
+    padding-left:10px;
+    line-height:1.6;
+  }
+
+  /* ===== Notes + links ===== */
+  .bottom-grid{
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+  }
+  .notes, .links{padding:22px 24px;}
+  .notes{border-right:2px solid var(--cyan);}
+  .notes h2, .links h2{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:14px;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 12px 0;
+  }
+  textarea{
+    width:100%;
+    min-height:140px;
+    background:var(--paper);
+    color:var(--ink);
+    border:1px solid var(--brass);
+    padding:12px;
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:13.5px;
+    resize:vertical;
+  }
+  .notes-actions{margin-top:10px;display:flex;gap:10px;}
+  .btn-secondary{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+    padding:8px 14px;
+    background:transparent;
+    color:var(--cyan);
+    border:1px solid var(--cyan);
+    cursor:pointer;
+  }
+  .btn-secondary:hover{background:rgba(127,196,220,0.12);}
+  .link-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;}
+  .link-list a{
+    color:var(--paper);
+    font-size:13.5px;
+    text-decoration:none;
+    border-bottom:1px dotted var(--grid-line-strong);
+    padding-bottom:8px;
+    display:block;
+  }
+  .link-list a:hover{color:var(--cyan);}
+  .link-list span{display:block;font-size:11.5px;color:#9FBFCC;margin-top:2px;}
+
+  footer{
+    padding:16px 24px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:#7C97A5;
+    text-align:center;
+  }
+
+  @media (max-width:720px){
+    .titleblock{grid-template-columns:1fr;}
+    .tb-main, .tb-cell{border-right:none;border-bottom:1px solid var(--grid-line-strong);}
+    .bottom-grid{grid-template-columns:1fr;}
+    .notes{border-right:none;border-bottom:2px solid var(--cyan);}
+    .stamp-btn{width:130px;height:130px;font-size:11.5px;}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- TITLE BLOCK -->
+  <div class="titleblock">
+    <div class="tb-main">
+      <div class="tb-eyebrow">Bảng ghi chú pháp lý &amp; kỹ thuật</div>
+      <div class="tb-title">Cập nhật Pháp luật Xây dựng · Bất động sản · Quy hoạch</div>
+      <div class="tb-sub">Công cụ tra cứu &amp; tóm tắt điểm mới phục vụ triển khai dự án</div>
+    </div>
+    <div class="tb-cell">
+      <div class="tb-label">Ký hiệu</div>
+      <div class="tb-value">PL-01</div>
+    </div>
+    <div class="tb-cell">
+      <div class="tb-label">Ngày</div>
+      <div class="tb-value" id="today"></div>
+    </div>
+    <div class="tb-project-input">
+      <label for="projectName">Dự án</label>
+      <input id="projectName" type="text" placeholder="Nhập tên dự án của bạn (tuỳ chọn, chỉ để ghi chú)">
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="controls-row">
+      <div class="field-group">
+        <h3>API Key Anthropic (Claude)</h3>
+        <input type="password" id="apiKey" class="key-input" placeholder="sk-ant-...">
+        <div class="key-hint">
+          Cần có key riêng để app gọi Claude tìm kiếm trực tiếp trên mạng. Lấy tại
+          <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> (tài khoản này tính phí theo lượng dùng, khác với claude.ai).
+          Key chỉ nằm trong bộ nhớ trình duyệt của bạn, không được lưu hay gửi đi đâu khác — nhưng
+          <strong>không đăng key này vào file khi đưa lên GitHub công khai</strong>, hãy để trống và nhập lại mỗi lần dùng.
+        </div>
+      </div>
+      <div class="field-group">
+        <h3>Lĩnh vực cần tra cứu</h3>
+        <div class="legend">
+          <label><input type="checkbox" value="Luật Đất đai" checked> Luật Đất đai</label>
+          <label><input type="checkbox" value="Luật Nhà ở" checked> Luật Nhà ở</label>
+          <label><input type="checkbox" value="Luật Kinh doanh Bất động sản" checked> Kinh doanh BĐS</label>
+          <label><input type="checkbox" value="Luật Xây dựng" checked> Luật Xây dựng</label>
+          <label><input type="checkbox" value="Quy chuẩn kỹ thuật (QCVN)" checked> Quy chuẩn (QCVN)</label>
+          <label><input type="checkbox" value="Tiêu chuẩn ngành (TCVN)"> Tiêu chuẩn (TCVN)</label>
+          <label><input type="checkbox" value="Quy hoạch đô thị & nông thôn" checked> Quy hoạch đô thị</label>
+          <label><input type="checkbox" value="Cấp phép xây dựng, PCCC"> Cấp phép &amp; PCCC</label>
+        </div>
+      </div>
+      <div class="search-block">
+        <button class="stamp-btn" id="searchBtn">Tra cứu<br>cập nhật<br>mới nhất</button>
+        <div class="status-line" id="statusLine"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS: REVISION TABLE -->
+  <div class="revtable-wrap">
+    <h2>Δ Bảng ghi nhận thay đổi mới nhất</h2>
+    <div class="caption">Kết quả do Claude tìm kiếm trực tiếp trên mạng tại thời điểm bấm nút — luôn đối chiếu lại nguồn chính thức trước khi áp dụng vào hồ sơ dự án.</div>
+    <div id="resultsArea">
+      <div class="empty-note">Chưa có dữ liệu — nhập API key, chọn lĩnh vực và bấm con dấu "Tra cứu cập nhật mới nhất" ở trên.</div>
+    </div>
+  </div>
+
+  <!-- STATIC OVERVIEW -->
+  <div class="overview">
+    <h2>Tổng quan khung pháp lý hiện hành (tham khảo nhanh)</h2>
+    <div class="caption">Ghi chú nền dựa trên kiến thức đến khoảng đầu 2026 — dùng để định hướng, không thay thế việc tra cứu trực tiếp vì luật/nghị định thay đổi liên tục.</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="tag">Đất đai</div>
+        <h4>Luật Đất đai 2024</h4>
+        <p>Thay thế Luật Đất đai 2013, siết lại quy định về bảng giá đất theo thị trường, thu hồi đất, bồi thường tái định cư và cấp sổ. Ảnh hưởng trực tiếp đến chi phí giải phóng mặt bằng và pháp lý đầu vào dự án.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Nhà ở</div>
+        <h4>Luật Nhà ở 2023</h4>
+        <p>Điều chỉnh điều kiện phát triển nhà ở xã hội, quy định về sở hữu nhà ở của người nước ngoài, thời hạn sở hữu chung cư — cần lưu ý khi hoạch định sản phẩm dự án nhà ở.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Kinh doanh BĐS</div>
+        <h4>Luật Kinh doanh Bất động sản 2023</h4>
+        <p>Siết điều kiện huy động vốn, bán nhà ở hình thành trong tương lai, bắt buộc giao dịch qua sàn/công chứng trong một số trường hợp — tác động đến kế hoạch bán hàng và dòng tiền dự án.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Quy hoạch</div>
+        <h4>Luật Quy hoạch đô thị và nông thôn 2024</h4>
+        <p>Hợp nhất khung pháp lý quy hoạch đô thị và nông thôn, thay đổi quy trình lập – thẩm định – điều chỉnh quy hoạch phân khu, chi tiết — ảnh hưởng trực tiếp đến thời gian pháp lý dự án.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Xây dựng</div>
+        <h4>Luật Xây dựng (bản hợp nhất, sửa đổi 2020) &amp; các nghị định hướng dẫn</h4>
+        <p>Quy định về phân loại dự án, thẩm định thiết kế, cấp phép xây dựng, quản lý chất lượng công trình — các nghị định hướng dẫn (quản lý dự án đầu tư xây dựng, quản lý chất lượng...) thường xuyên được sửa đổi, cần kiểm tra bản mới nhất.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Quy chuẩn kỹ thuật</div>
+        <h4>QCVN 06 về an toàn cháy cho nhà và công trình</h4>
+        <p>Quy chuẩn PCCC được cập nhật định kỳ và có ảnh hưởng lớn đến thiết kế kiến trúc – kết cấu (khoảng lùi, lối thoát hiểm, vật liệu). Luôn dùng bản QCVN 06 hiệu lực mới nhất khi thẩm duyệt.</p>
+      </div>
+    </div>
+    <div class="disclaimer">
+      ⚠ Đây là tóm tắt định hướng, không phải tư vấn pháp lý. Số hiệu văn bản, ngày hiệu lực và nội dung chi tiết có thể đã thay đổi — hãy dùng chức năng "Tra cứu cập nhật mới nhất" ở trên hoặc các nguồn chính thức bên dưới để xác minh trước khi áp dụng cho dự án thực tế.
+    </div>
+  </div>
+
+  <!-- NOTES + LINKS -->
+  <div class="bottom-grid">
+    <div class="notes">
+      <h2>Ghi chú của bạn</h2>
+      <textarea id="userNotes" placeholder="Ghi lại điểm cần lưu ý cho dự án của bạn tại đây..."></textarea>
+      <div class="notes-actions">
+        <button class="btn-secondary" id="downloadNotes">Tải ghi chú (.txt)</button>
+        <button class="btn-secondary" id="clearNotes">Xoá ghi chú</button>
+      </div>
+    </div>
+    <div class="links">
+      <h2>Nguồn tra cứu chính thức</h2>
+      <ul class="link-list">
+        <li><a href="https://thuvienphapluat.vn" target="_blank">Thư viện Pháp luật
+          <span>Tra cứu toàn văn luật, nghị định, thông tư, cập nhật hiệu lực</span></a></li>
+        <li><a href="https://xaydung.gov.vn" target="_blank">Bộ Xây dựng
+          <span>Văn bản QPPL, quy chuẩn – tiêu chuẩn ngành xây dựng</span></a></li>
+        <li><a href="https://vanban.chinhphu.vn" target="_blank">Cổng thông tin Chính phủ – Văn bản
+          <span>Nghị định, quyết định, chỉ thị mới ban hành</span></a></li>
+        <li><a href="https://moc.gov.vn" target="_blank">Cổng TTĐT Bộ Xây dựng
+          <span>Tin tức, dự thảo văn bản đang lấy ý kiến</span></a></li>
+        <li><a href="https://vietbao.vn/tim-kiem?q=quy+chuẩn+xây+dựng" target="_blank">Tìm kiếm QCVN/TCVN mới
+          <span>Tra soát nhanh quy chuẩn, tiêu chuẩn theo từ khoá</span></a></li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>Công cụ tham khảo — không thay thế tư vấn pháp lý chuyên môn. Luôn xác minh với văn bản gốc trước khi áp dụng.</footer>
+</div>
+
+<script>
+document.getElementById('today').textContent = new Date().toLocaleDateString('vi-VN');
+
+// ---- Notes ----
+const notesArea = document.getElementById('userNotes');
+document.getElementById('downloadNotes').addEventListener('click', () => {
+  const blob = new Blob([notesArea.value || ''], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ghi-chu-phap-ly-du-an.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+document.getElementById('clearNotes').addEventListener('click', () => {
+  if(confirm('Xoá toàn bộ ghi chú?')) notesArea.value = '';
+});
+
+// ---- Simple markdown-ish renderer ----
+function renderMarkdown(text){
+  let html = text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^### (.*)$/gm,'<h4>$1</h4>')
+    .replace(/^## (.*)$/gm,'<h3>$1</h3>')
+    .replace(/^# (.*)$/gm,'<h2>$1</h2>')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/^-\s+(.*)$/gm,'<li>$1</li>')
+    .replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" style="color:var(--ok-green)">$1</a>');
+  html = html.replace(/(<li>.*<\/li>\n?)+/g, m => '<ul style="margin:8px 0;padding-left:20px;">' + m + '</ul>');
+  return html.replace(/\n/g,'<br>');
+}
+
+// ---- Search ----
+const searchBtn = document.getElementById('searchBtn');
+const statusLine = document.getElementById('statusLine');
+const resultsArea = document.getElementById('resultsArea');
+
+searchBtn.addEventListener('click', async () => {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const fields = Array.from(document.querySelectorAll('.legend input:checked')).map(i => i.value);
+
+  if(!apiKey){
+    statusLine.textContent = 'Vui lòng nhập API key trước.';
+    return;
+  }
+  if(fields.length === 0){
+    statusLine.textContent = 'Chọn ít nhất một lĩnh vực.';
+    return;
+  }
+
+  searchBtn.disabled = true;
+  statusLine.textContent = 'Đang tìm kiếm trên mạng...';
+  resultsArea.innerHTML = '<div class="empty-note">Đang tra cứu, vui lòng chờ (có thể mất 20–60 giây)...</div>';
+
+  const prompt = `Bạn là trợ lý pháp lý chuyên ngành xây dựng - bất động sản - quy hoạch tại Việt Nam.
+Hãy tìm kiếm trên mạng các quy định pháp luật, quy chuẩn, tiêu chuẩn MỚI NHẤT hoặc MỚI THAY ĐỔI liên quan đến các lĩnh vực sau: ${fields.join(', ')}.
+
+Với mỗi văn bản/quy định tìm được, trình bày theo định dạng:
+### [Tên văn bản đầy đủ, số hiệu nếu có]
+- Lĩnh vực: ...
+- Ngày ban hành / hiệu lực: ...
+- Điểm mới / thay đổi trọng tâm: (tóm tắt ngắn gọn, đúng trọng tâm, 2-4 gạch đầu dòng)
+- Ảnh hưởng đến dự án xây dựng/bất động sản: (1-2 câu)
+- Nguồn: (link URL)
+
+Chỉ liệt kê các văn bản có thông tin xác thực tìm được qua tìm kiếm, không suy đoán. Sắp xếp theo mức độ quan trọng/mới nhất trước. Trả lời bằng tiếng Việt, súc tích, đúng trọng tâm cho người làm dự án xây dựng/kiến trúc/quy hoạch.`;
+
+  try{
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-5',
+        max_tokens: 4000,
+        messages: [{ role: 'user', content: prompt }],
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }]
+      })
+    });
+
+    if(!response.ok){
+      const errText = await response.text();
+      throw new Error('Lỗi API (' + response.status + '): ' + errText.slice(0,300));
+    }
+
+    const data = await response.json();
+    const textBlocks = (data.content || []).filter(b => b.type === 'text').map(b => b.text);
+    const fullText = textBlocks.join('\n\n');
+
+    if(!fullText.trim()){
+      resultsArea.innerHTML = '<div class="empty-note">Không nhận được nội dung trả lời. Thử lại hoặc kiểm tra key.</div>';
+    } else {
+      resultsArea.innerHTML = '<div class="ai-text">' + renderMarkdown(fullText) + '</div>';
+    }
+    statusLine.textContent = 'Hoàn tất lúc ' + new Date().toLocaleTimeString('vi-VN');
+  } catch(err){
+    console.error(err);
+    resultsArea.innerHTML = '<div class="empty-note">Có lỗi xảy ra: ' + (err.message || err) + '<br>Kiểm tra lại API key hoặc thử lại sau.</div>';
+    statusLine.textContent = 'Thất bại.';
+  } finally {
+    searchBtn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
